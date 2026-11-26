@@ -1,28 +1,25 @@
-import { profile } from "@/lib/data";
-import { Navbar } from "@/components/Navbar";
-import { Hero } from "@/components/Hero";
+import { PortfolioTop } from "@/components/PortfolioTop";
 import { About } from "@/components/About";
-import { Skills } from "@/components/Skills";
 import { Projects } from "@/components/Projects";
 import { Applications } from "@/components/Applications";
+import { Skills } from "@/components/Skills";
 import { Journey } from "@/components/Journey";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 
 export default function Page() {
   return (
-    <>
-      <Navbar name={profile.name} cvUrl={profile.cvUrl} />
+    <div className="relative z-10">
       <main id="contenu">
-        <Hero />
+        <PortfolioTop />
         <About />
-        <Skills />
         <Projects />
         <Applications />
+        <Skills />
         <Journey />
         <Contact />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

@@ -1,147 +1,142 @@
 "use client";
 
-import { webProjects, webInProgress, type WebProject } from "@/lib/data";
+import { useState } from "react";
+import { flagshipProjects, type FlagshipProject } from "@/lib/data";
+import { ProjectMockup, ProjectModal } from "./ProjectModal";
 import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 import { Spotlight } from "./Spotlight";
 
-function domaine(url: string) {
-  try {
-    return new URL(url).host;
-  } catch {
-    return url;
-  }
-}
+const FILTERS = ["Tous", "En ligne", "Code source", "En cours"] as const;
 
-function WebCard({ p }: { p: WebProject }) {
-  const soon = p.status === "soon";
+export function Projects() {
+  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("Tous");
+  const [selected, setSelected] = useState<FlagshipProject | null>(null);
+
+  const visible =
+    filter === "Tous"
+      ? flagshipProjects
+      : flagshipProjects.filter((p) => p.status === filter);
+
   return (
-    <Spotlight className="group h-full !rounded-2xl !p-0 overflow-hidden">
-      <article className="relative flex h-full flex-col">
-        {/* Page de garde / cover */}
-        <div
-          className="project-cover"
-          style={{
-            background: `linear-gradient(145deg, hsl(${p.hue} 80% 55% / 0.95), hsl(${(p.hue + 55) % 360} 75% 45% / 0.9))`,
-          }}
-        >
-          <div
-            className="project-cover-glow"
-            style={{
-              top: "10%",
-              left: "15%",
-              background: `hsl(${p.hue} 90% 70%)`,
-            }}
+    <section id="projets-web" className="border-t border-line bg-bg-soft/35 py-24 sm:py-32">
+      <div className="container-wide">
+        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <SectionHeading
+            index="02 / RÉALISATIONS"
+            title="Projets Phares"
+            subtitle="Applications web en production, outils desktop JavaFX et plateformes full-stack en développement."
           />
-          <div
-            className="project-cover-glow"
-            style={{
-              bottom: "5%",
-              right: "10%",
-              background: `hsl(${(p.hue + 60) % 360} 90% 65%)`,
-              animationDelay: "-2s",
-            }}
-          />
-          <span
-            aria-hidden
-            className="absolute -right-2 top-2 text-[7rem] font-bold leading-none text-white/15 select-none"
-          >
-            {p.title.charAt(0)}
-          </span>
-          <div className="absolute inset-0 z-[1] flex flex-col justify-between p-5">
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-white/20 px-3 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
-                {p.coverLabel ?? (soon ? "En cours" : "Live")}
-              </span>
-              {!soon && (
-                <span className="flex items-center gap-1.5 rounded-full bg-black/20 px-2.5 py-1 text-[11px] text-white/90 backdrop-blur-sm">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  En ligne
-                </span>
-              )}
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold text-white drop-shadow-md">{p.title}</h3>
-              {!soon && (
-                <p className="mt-1 text-xs text-white/70">{domaine(p.url)}</p>
-              )}
-            </div>
+
+          <div className="mb-12 flex flex-wrap gap-2" role="group" aria-label="Filtrer les projets">
+            {FILTERS.map((f) => (
+              <button
+                key={f}
+                type="button"
+                onClick={() => setFilter(f)}
+                className={`min-h-[40px] rounded-full border px-4 py-1.5 font-mono text-xs transition-colors ${
+                  filter === f
+                    ? "border-accent bg-accent text-[#061017] font-semibold"
+                    : "border-line bg-bg-soft text-muted hover:border-line-strong hover:text-fg"
+                }`}
+              >
+                {f}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col p-5">
-          <p className="flex-1 text-sm leading-relaxed text-muted">{p.description}</p>
-          <ul className="mt-4 flex flex-wrap gap-2">
-            {p.tags.map((t) => (
-              <li key={t} className="rounded-md bg-white/5 px-2.5 py-1 text-xs text-muted">
-                {t}
-              </li>
-            ))}
-          </ul>
-          {!soon ? (
-            <a
-              href={p.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Ouvrir ${p.title} dans un nouvel onglet`}
-              className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-fg after:absolute after:inset-0 after:content-['']"
-            >
-              Voir le projet
-              <span
-                aria-hidden
-                className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1"
-              >
-                ↗
-              </span>
-            </a>
-          ) : (
-            <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-faint">
-              Bientôt disponible
-            </span>
-          )}
-        </div>
-      </article>
-    </Spotlight>
-  );
-}
+        <div className="grid gap-7 lg:grid-cols-2">
+          {visible.map((project, idx) => (
+            <Reveal key={project.id} delay={idx * 90}>
+              <Spotlight className="group flex h-full flex-col overflow-hidden">
+                <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-line">
+                  <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.02]">
+                    <ProjectMockup kind={project.mockupKind} />
+                  </div>
+                  <div className="absolute left-4 top-4 flex items-center gap-2">
+                    <span className="rounded-full border border-white/15 bg-black/55 px-3 py-1 font-mono text-[11px] text-white backdrop-blur-md">
+                      {project.category}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 font-mono text-[11px] text-white/90 backdrop-blur-md">
+                      {project.status === "En ligne" && (
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      )}
+                      {project.status}
+                    </span>
+                  </div>
+                </div>
 
-export function Projects() {
-  return (
-    <section id="projets-web" className="py-28">
-      <div className="container-wide">
-        <Reveal>
-          <SectionHeading
-            title="Projets Web"
-            subtitle="Applications web en production et projets en cours de finalisation."
-          />
-        </Reveal>
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <h3 className="font-display text-2xl font-bold tracking-tight text-fg">
+                      {project.title}
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() => setSelected(project)}
+                      className="rounded-full border border-line px-3.5 py-1.5 font-mono text-xs text-accent transition-colors hover:border-accent hover:bg-accent-soft"
+                    >
+                      Inspecter
+                    </button>
+                  </div>
 
-        <div className="grid gap-7 sm:grid-cols-2">
-          {webProjects.map((p, i) => (
-            <Reveal key={p.title} delay={i * 120}>
-              <WebCard p={p} />
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+                    {project.shortDescription}
+                  </p>
+
+                  <ul className="mt-5 flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <li
+                        key={tag}
+                        className="rounded-md border border-line bg-bg px-2.5 py-1 font-mono text-xs text-muted"
+                      >
+                        {tag}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-line pt-4 text-sm font-medium">
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-fg transition-colors hover:text-accent"
+                      >
+                        Voir en ligne ↗
+                      </a>
+                    )}
+                    {project.repoUrl && (
+                      <a
+                        href={project.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-fg"
+                      >
+                        GitHub ↗
+                      </a>
+                    )}
+                    {!project.liveUrl && !project.repoUrl && (
+                      <span className="font-mono text-xs text-faint">
+                        Déploiement prochainement
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </Spotlight>
             </Reveal>
           ))}
         </div>
-
-        {webInProgress.length > 0 && (
-          <>
-            <Reveal className="mt-16">
-              <h3 className="mb-2 text-lg font-semibold text-fg">En cours</h3>
-              <p className="mb-6 text-sm text-muted">
-                Projets en développement actif — bientôt en ligne.
-              </p>
-            </Reveal>
-            <div className="grid gap-7 sm:grid-cols-2">
-              {webInProgress.map((p, i) => (
-                <Reveal key={p.title} delay={i * 100}>
-                  <WebCard p={p} />
-                </Reveal>
-              ))}
-            </div>
-          </>
-        )}
       </div>
+
+      {selected && (
+        <ProjectModal
+          key={selected.id}
+          project={selected}
+          onClose={() => setSelected(null)}
+        />
+      )}
     </section>
   );
 }

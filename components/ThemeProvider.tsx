@@ -4,8 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 
@@ -20,29 +19,37 @@ export function useTheme() {
   return useContext(ThemeContext);
 }
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
+function subscribe(callback: () => void) {
+  window.addEventListener("theme-change", callback);
+  window.addEventListener("storage", callback);
+  return () => {
+    window.removeEventListener("theme-change", callback);
+    window.removeEventListener("storage", callback);
+  };
+}
 
-  useEffect(() => {
-    const attr = document.documentElement.getAttribute("data-theme") as Theme | null;
-    if (attr === "light" || attr === "dark") {
-      setTheme(attr);
-      return;
-    }
-    const stored = localStorage.getItem("theme") as Theme | null;
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initial = stored ?? (prefersDark ? "dark" : "light");
-    setTheme(initial);
-    document.documentElement.setAttribute("data-theme", initial);
-  }, []);
+function getSnapshot(): Theme {
+  const attr = document.documentElement.getAttribute("data-theme");
+  return attr === "light" ? "light" : "dark";
+}
+
+function getServerSnapshot(): Theme {
+  return "dark";
+}
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const toggle = useCallback(() => {
-    setTheme((prev) => {
-      const next = prev === "dark" ? "light" : "dark";
+    const current = getSnapshot();
+    const next: Theme = current === "dark" ? "light" : "dark";
+    try {
       localStorage.setItem("theme", next);
-      document.documentElement.setAttribute("data-theme", next);
-      return next;
-    });
+    } catch {
+      /* stockage indisponible */
+    }
+    document.documentElement.setAttribute("data-theme", next);
+    window.dispatchEvent(new Event("theme-change"));
   }, []);
 
   return (

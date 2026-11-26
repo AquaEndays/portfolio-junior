@@ -1,9 +1,31 @@
-export function SectionHeading({ title, subtitle }: { title: string; subtitle?: string }) {
+"use client";
+
+import { MaskedLine, WordStream } from "./KineticText";
+
+export function SectionHeading({
+  index,
+  title,
+  subtitle,
+}: {
+  index?: string;
+  title: string;
+  subtitle?: string;
+}) {
   return (
     <div className="mb-12 max-w-2xl">
-      <h2 className="text-3xl font-semibold tracking-tight text-fg sm:text-4xl">{title}</h2>
-      <div className="mt-4 h-[3px] w-14 rounded-full bg-gradient-to-r from-accent to-accent-2" />
-      {subtitle && <p className="mt-5 text-[15px] leading-relaxed text-muted">{subtitle}</p>}
+      {index && (
+        <p className="mb-3 font-mono text-xs tracking-[0.2em] text-accent">
+          {index}
+        </p>
+      )}
+      <h2 className="font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl lg:text-[2.75rem] lg:leading-[1.08]">
+        <MaskedLine>{title}</MaskedLine>
+      </h2>
+      {subtitle && (
+        <p className="mt-4 max-w-[60ch] text-[15px] leading-relaxed text-muted sm:text-base">
+          <WordStream text={subtitle} stepMs={18} />
+        </p>
+      )}
     </div>
   );
 }

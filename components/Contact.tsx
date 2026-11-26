@@ -2,56 +2,76 @@
 
 import { profile } from "@/lib/data";
 import { CopyEmail } from "./CopyEmail";
+import { MaskedLine, WordStream } from "./KineticText";
 import { Reveal } from "./Reveal";
+import { Spotlight } from "./Spotlight";
 
 export function Contact() {
   return (
-    <section id="contact" className="relative isolate overflow-hidden">
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div
-          className="blob blob-a"
-          style={{ left: "-20vmax", top: "auto", bottom: "-24vmax", opacity: 0.35 }}
-        />
-        <div
-          className="blob blob-b"
-          style={{ right: "-18vmax", top: "auto", bottom: "-20vmax", opacity: 0.3 }}
-        />
-      </div>
-      <div className="container-wide py-32 text-center">
-        <Reveal>
-          <h2 className="text-4xl font-semibold tracking-tight text-fg sm:text-5xl lg:text-6xl">
-            Travaillons <span className="gradient-text">ensemble</span>
-          </h2>
-          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-[17px]">
-            Un projet, un stage, une question ? Écrivez-moi, je réponds avec plaisir.
-          </p>
-        </Reveal>
+    <section id="contact" className="border-t border-line bg-bg-soft/35 py-24 sm:py-32">
+      <div className="container-wide">
+        <div className="grid items-end gap-12 lg:grid-cols-[1.15fr,0.85fr]">
+          <div>
+            <p className="mb-3 font-mono text-xs tracking-[0.2em] text-accent">
+              06 / CONTACT
+            </p>
+            <h2 className="font-display text-4xl font-extrabold leading-[1.02] tracking-tight text-fg sm:text-6xl">
+              <MaskedLine>Construisons</MaskedLine>
+              <MaskedLine delay={100} className="text-accent">
+                votre prochain projet.
+              </MaskedLine>
+            </h2>
+            <p className="mt-6 max-w-[54ch] text-base leading-relaxed text-muted sm:text-[17px]">
+              <WordStream
+                text="Un poste junior, un stage, une mission full-stack ou une collaboration technique ? Discutons-en directement."
+                stepMs={20}
+              />
+            </p>
+          </div>
 
-        <Reveal delay={120} className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <a href={`mailto:${profile.email}`} className="btn-primary">
-            {profile.email}
-          </a>
-          <CopyEmail email={profile.email} />
-        </Reveal>
+          <Reveal delay={120}>
+            <Spotlight className="p-6 sm:p-8">
+              <p className="font-mono text-xs tracking-wider text-faint">
+                CONTACT DIRECT
+              </p>
+              <a
+                href={`mailto:${profile.email}`}
+                className="mt-3 block break-all font-display text-xl font-bold text-fg transition-colors hover:text-accent sm:text-2xl"
+              >
+                {profile.email}
+              </a>
+              <p className="mt-2 font-mono text-xs text-muted">
+                {profile.location} · Réponse rapide
+              </p>
 
-        <Reveal delay={200} className="mt-8 flex items-center justify-center gap-8 text-sm">
-          <a
-            href={profile.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted transition-colors hover:text-fg"
-          >
-            GitHub ↗
-          </a>
-          <a
-            href={profile.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted transition-colors hover:text-fg"
-          >
-            LinkedIn ↗
-          </a>
-        </Reveal>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a href={`mailto:${profile.email}`} className="btn-primary">
+                  Envoyer un message ↗
+                </a>
+                <CopyEmail email={profile.email} />
+              </div>
+
+              <div className="mt-6 flex items-center gap-6 border-t border-line pt-5 text-sm font-medium">
+                <a
+                  href={profile.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted transition-colors hover:text-accent"
+                >
+                  GitHub (@{profile.handle}) ↗
+                </a>
+                <a
+                  href={profile.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted transition-colors hover:text-accent"
+                >
+                  LinkedIn ↗
+                </a>
+              </div>
+            </Spotlight>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

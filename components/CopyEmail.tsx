@@ -9,15 +9,15 @@ export function CopyEmail({ email }: { email: string }) {
     try {
       await navigator.clipboard.writeText(email);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 2200);
     } catch {
-      /* presse-papiers indisponible : le lien mailto reste utilisable */
+      window.location.href = `mailto:${email}`;
     }
   }
 
   return (
-    <button type="button" onClick={copy} className="btn-ghost" aria-live="polite">
-      {copied ? "Adresse copiée ✓" : "Copier l'adresse"}
+    <button type="button" onClick={copy} className="btn-secondary" aria-live="polite">
+      {copied ? "Adresse copiée ✓" : "Copier l'email"}
     </button>
   );
 }
