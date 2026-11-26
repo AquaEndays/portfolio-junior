@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { appProjects, longstarTopology, type AppProject } from "@/lib/data";
 import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
@@ -14,8 +13,6 @@ const TYPE_LABEL: Record<AppProject["type"], string> = {
 };
 
 export function Applications() {
-  const [activeZone, setActiveZone] = useState(longstarTopology.zones[0]);
-
   return (
     <section id="applications" className="py-24 sm:py-32">
       <div className="container-wide">
@@ -26,158 +23,36 @@ export function Applications() {
         />
 
         <Reveal>
-          <Spotlight className="overflow-hidden">
-            <div className="grid lg:grid-cols-[1.05fr,0.95fr]">
-              <div className="flex flex-col justify-between border-b border-line bg-bg-elevated/60 p-6 sm:p-8 lg:border-b-0 lg:border-r">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-xs tracking-wider text-accent">
-                    TOPOLOGIE INTERACTIVE · CISCO PACKET TRACER
+          <Spotlight className="overflow-hidden p-6 sm:p-8 lg:p-10">
+            <div className="grid gap-10 lg:grid-cols-[1.05fr,0.95fr] lg:items-center">
+              <div className="space-y-5">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="rounded-full border border-accent/30 bg-accent-soft px-3 py-1 font-mono text-xs text-accent">
+                    CISCO PACKET TRACER
                   </span>
-                  <span className="rounded-full border border-line bg-bg px-2.5 py-0.5 font-mono text-[11px] text-muted">
-                    longstar.pkt
-                  </span>
+                  <span className="font-mono text-xs text-faint">longstar.pkt</span>
                 </div>
 
-                <div className="my-6 rounded-2xl border border-line bg-bg p-4 sm:p-6">
-                  <svg
-                    viewBox="0 0 520 220"
-                    className="w-full"
-                    role="img"
-                    aria-label="Schéma d'architecture réseau Longstar"
-                  >
-                    <line x1="85" y1="110" x2="210" y2="110" stroke="var(--line-strong)" strokeWidth="2" strokeDasharray="5 4" />
-                    <line x1="210" y1="110" x2="320" y2="55" stroke="var(--line-strong)" strokeWidth="2" />
-                    <line x1="210" y1="110" x2="320" y2="165" stroke="var(--line-strong)" strokeWidth="2" />
-                    <line x1="320" y1="165" x2="435" y2="165" stroke="var(--accent)" strokeWidth="2" strokeDasharray="6 4" />
+                <h3 className="font-display text-2xl font-bold text-fg sm:text-3xl">
+                  {longstarTopology.title}
+                </h3>
 
-                    {[
-                      { id: "lan", x: 85, y: 110, title: "LAN VLANs", sub: "4 segments" },
-                      { id: "asa", x: 210, y: 110, title: "Cisco ASA", sub: "Pare-feu" },
-                      { id: "dmz", x: 320, y: 55, title: "Zone DMZ", sub: "Web / DNS" },
-                      { id: "vpn", x: 435, y: 165, title: "Succursale", sub: "VPN IPSec" },
-                    ].map((node) => {
-                      const zone = longstarTopology.zones.find((z) => z.id === node.id)!;
-                      const isActive = activeZone.id === node.id;
-                      return (
-                        <g
-                          key={node.id}
-                          onClick={() => setActiveZone(zone)}
-                          className="cursor-pointer"
-                        >
-                          <rect
-                            x={node.x - 58}
-                            y={node.y - 26}
-                            width="116"
-                            height="52"
-                            rx="12"
-                            fill={isActive ? "var(--accent-soft)" : "var(--bg-soft)"}
-                            stroke={isActive ? "var(--accent)" : "var(--line-strong)"}
-                            strokeWidth={isActive ? "2" : "1.2"}
-                          />
-                          <text
-                            x={node.x}
-                            y={node.y - 3}
-                            textAnchor="middle"
-                            fill="var(--fg)"
-                            fontSize="11.5"
-                            fontWeight="600"
-                            fontFamily="var(--font-sans)"
-                          >
-                            {node.title}
-                          </text>
-                          <text
-                            x={node.x}
-                            y={node.y + 14}
-                            textAnchor="middle"
-                            fill="var(--muted)"
-                            fontSize="9.5"
-                            fontFamily="var(--font-mono)"
-                          >
-                            {node.sub}
-                          </text>
-                        </g>
-                      );
-                    })}
+                <p className="text-sm leading-relaxed text-muted sm:text-[15px]">
+                  {longstarTopology.summary}
+                </p>
 
-                    <g>
-                      <rect
-                        x="268"
-                        y="142"
-                        width="104"
-                        height="46"
-                        rx="10"
-                        fill="var(--bg-soft)"
-                        stroke="var(--line)"
-                      />
-                      <text
-                        x="320"
-                        y="163"
-                        textAnchor="middle"
-                        fill="var(--fg)"
-                        fontSize="10.5"
-                        fontFamily="var(--font-sans)"
-                      >
-                        Routeur Bordure
-                      </text>
-                      <text
-                        x="320"
-                        y="177"
-                        textAnchor="middle"
-                        fill="var(--accent)"
-                        fontSize="9"
-                        fontFamily="var(--font-mono)"
-                      >
-                        IPSec Tunnel
-                      </text>
-                    </g>
-                  </svg>
-                </div>
+                <ul className="flex flex-wrap gap-2 pt-1">
+                  {longstarTopology.tags.map((tag) => (
+                    <li
+                      key={tag}
+                      className="rounded-md border border-line bg-bg px-2.5 py-1 font-mono text-xs text-muted"
+                    >
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
 
-                <div className="rounded-xl border border-line bg-bg/80 p-4">
-                  <p className="font-mono text-xs text-accent">{activeZone.label}</p>
-                  <p className="mt-1 text-sm text-muted">{activeZone.detail}</p>
-                </div>
-              </div>
-
-              <div className="flex flex-col justify-between p-6 sm:p-8">
-                <div className="space-y-4">
-                  <h3 className="font-display text-2xl font-bold text-fg sm:text-3xl">
-                    {longstarTopology.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-muted sm:text-[15px]">
-                    {longstarTopology.summary}
-                  </p>
-
-                  <div className="grid grid-cols-2 gap-2.5 pt-2">
-                    {longstarTopology.zones.map((zone) => (
-                      <button
-                        key={zone.id}
-                        type="button"
-                        onClick={() => setActiveZone(zone)}
-                        className={`rounded-xl border p-3 text-left transition-colors ${
-                          activeZone.id === zone.id
-                            ? "border-accent bg-accent-soft"
-                            : "border-line bg-bg hover:border-line-strong"
-                        }`}
-                      >
-                        <p className="font-mono text-xs font-medium text-fg">{zone.label}</p>
-                      </button>
-                    ))}
-                  </div>
-
-                  <ul className="flex flex-wrap gap-2 pt-3">
-                    {longstarTopology.tags.map((tag) => (
-                      <li
-                        key={tag}
-                        className="rounded-md border border-line bg-bg px-2.5 py-1 font-mono text-xs text-muted"
-                      >
-                        {tag}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-8 border-t border-line pt-5">
+                <div className="pt-2">
                   <a
                     href={longstarTopology.downloadUrl}
                     download
@@ -191,6 +66,24 @@ export function Applications() {
                     {longstarTopology.downloadLabel}
                   </a>
                 </div>
+              </div>
+
+              <div className="divide-y divide-line border-y border-line">
+                {longstarTopology.zones.map((zone, idx) => (
+                  <div key={zone.id} className="flex items-start gap-4 py-4">
+                    <span className="mt-0.5 font-mono text-xs text-accent">
+                      0{idx + 1}
+                    </span>
+                    <div>
+                      <p className="font-display text-base font-semibold text-fg">
+                        {zone.label}
+                      </p>
+                      <p className="mt-1 text-sm leading-relaxed text-muted">
+                        {zone.detail}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </Spotlight>

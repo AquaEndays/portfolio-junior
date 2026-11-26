@@ -55,14 +55,23 @@
 
 html {
   background: var(--bg);
-  scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
+}
+
+@media (pointer: fine) {
+  .has-custom-cursor,
+  .has-custom-cursor * {
+    cursor: none !important;
+  }
 }
 
 body {
   min-height: 100dvh;
   overflow-x: hidden;
-  background: var(--bg);
+  background:
+    radial-gradient(900px 520px at 75% -5%, var(--accent-soft), transparent 62%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--fg);
   transition: background-color 0.3s ease, color 0.3s ease;
 }

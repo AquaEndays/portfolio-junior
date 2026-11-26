@@ -50,7 +50,11 @@ export function Projects() {
           {visible.map((project, idx) => (
             <Reveal key={project.id} delay={idx * 90}>
               <Spotlight className="group flex h-full flex-col overflow-hidden">
-                <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-line">
+                <div
+                  data-cursor="INSPECTER"
+                  onClick={() => setSelected(project)}
+                  className="relative aspect-[16/10] w-full cursor-pointer overflow-hidden border-b border-line"
+                >
                   <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.02]">
                     <ProjectMockup kind={project.mockupKind} />
                   </div>
