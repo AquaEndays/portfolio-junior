@@ -112,7 +112,7 @@ export function ProjectMockup({ kind }: { kind: FlagshipProject["mockupKind"] })
             MVC · MySQL
           </span>
         </div>
-        <div className="mt-4 grid grid-cols-[0.36fr,0.64fr] gap-3">
+        <div className="mt-4 grid grid-cols-[0.36fr_0.64fr] gap-3">
           <div className="space-y-1.5 rounded-lg border border-white/10 bg-white/5 p-2.5 font-mono text-[9px] text-white/70">
             <div className="rounded bg-accent/20 px-2 py-1 text-accent">Dashboard</div>
             <div className="px-2 py-1">Réservations</div>
@@ -238,7 +238,7 @@ export function ProjectModal({
           </div>
         </div>
 
-        <div className="grid flex-1 overflow-y-auto lg:grid-cols-[1.2fr,0.8fr]">
+        <div className="grid flex-1 overflow-y-auto lg:grid-cols-[1.2fr_0.8fr]">
           <div className="relative min-h-[300px] border-b border-line bg-bg lg:min-h-[440px] lg:border-b-0 lg:border-r">
             {viewMode === "live" && project.embeddable && project.liveUrl ? (
               <iframe

@@ -24,7 +24,7 @@ export function Applications() {
 
         <Reveal>
           <Spotlight className="overflow-hidden p-6 sm:p-8 lg:p-10">
-            <div className="grid gap-10 lg:grid-cols-[1.05fr,0.95fr] lg:items-center">
+            <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
               <div className="space-y-5">
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="rounded-full border border-accent/30 bg-accent-soft px-3 py-1 font-mono text-xs text-accent">

@@ -29,7 +29,7 @@ export function Hero({ ready }: { ready: boolean }) {
       <div aria-hidden className="arch-grid pointer-events-none absolute inset-0 -z-10" />
 
       <div className="container-wide flex min-h-[calc(100dvh-5rem)] flex-col justify-between pb-10 pt-10 lg:pt-14">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.28fr,0.72fr] lg:gap-14">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
           <div>
             <div
               className={`inline-flex items-center gap-2.5 rounded-full border border-line bg-bg-soft/80 px-4 py-1.5 text-xs font-medium text-muted backdrop-blur transition-all duration-700 ${
@@ -106,45 +106,66 @@ export function Hero({ ready }: { ready: boolean }) {
           </div>
 
           <div
-            className={`relative mx-auto w-full max-w-[300px] sm:max-w-[340px] lg:justify-self-end transition-all duration-700 delay-300 ${
+            className={`relative mx-auto flex w-full max-w-[300px] flex-col items-center sm:max-w-[350px] lg:justify-self-end transition-all duration-700 delay-300 ${
               ready ? "scale-100 opacity-100" : "scale-95 opacity-0"
             }`}
           >
             <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-4 -z-10 rounded-full bg-accent/20 blur-3xl"
+            />
+
+            <div
               ref={frameRef}
               onMouseMove={handleTilt}
               onMouseLeave={resetTilt}
-              className="relative rounded-3xl border border-line-strong bg-bg-soft p-3 shadow-[var(--shadow)] transition-transform duration-300 ease-out"
+              className="relative aspect-square w-full p-3 transition-transform duration-300 ease-out"
             >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-bg-elevated">
-                {photoOk ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={profile.photoUrl}
-                    alt={`Portrait de ${profile.fullName}`}
-                    className="h-full w-full object-cover object-top transition-transform duration-700 hover:scale-[1.03]"
-                    onError={() => setPhotoOk(false)}
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center p-6 text-center font-mono text-xs text-faint">
-                    public/photo.jpg
-                  </div>
-                )}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-bg/90 via-bg/35 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-2">
-                  <div>
-                    <p className="font-display text-base font-bold text-white">{profile.fullName}</p>
-                    <p className="font-mono text-[11px] text-white/75">{profile.location}</p>
-                  </div>
-                  <span className="rounded-full border border-white/20 bg-black/40 px-2.5 py-1 font-mono text-[10px] text-white backdrop-blur-md">
-                    @{profile.handle}
-                  </span>
+              {/* Anneau orbital extérieur */}
+              <svg
+                viewBox="0 0 360 360"
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 h-full w-full text-accent/40 animate-[spin_45s_linear_infinite]"
+              >
+                <circle
+                  cx="180"
+                  cy="180"
+                  r="174"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeDasharray="6 10"
+                />
+                <circle cx="180" cy="6" r="3" fill="currentColor" />
+                <circle cx="180" cy="354" r="3" fill="currentColor" />
+              </svg>
+
+              {/* Cadran circulaire principal */}
+              <div className="relative h-full w-full overflow-hidden rounded-full border-2 border-line-strong bg-bg-soft p-1.5 shadow-[var(--shadow)]">
+                <div className="relative h-full w-full overflow-hidden rounded-full bg-bg-elevated">
+                  {photoOk ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={profile.photoUrl}
+                      alt={`Portrait de ${profile.fullName}`}
+                      className="h-full w-full scale-[1.06] object-cover object-[50%_20%] contrast-[1.04] transition-transform duration-700 hover:scale-[1.1]"
+                      onError={() => setPhotoOk(false)}
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center p-6 text-center font-mono text-xs text-faint">
+                      public/photo.jpg
+                    </div>
+                  )}
+                  <div className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_0_48px_rgba(9,12,18,0.68)]" />
                 </div>
               </div>
 
-              <div className="mt-3 flex items-center justify-between px-1.5 font-mono text-[11px] text-muted">
-                <span>{profile.level} · {profile.school}</span>
-                <span className="text-accent">Full-Stack</span>
+              {/* Pastille coordonnées ancrée proprement sous le cadran */}
+              <div className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-2.5 whitespace-nowrap rounded-full border border-line-strong bg-bg-soft/95 px-4 py-1.5 font-mono text-[11px] text-fg shadow-lg backdrop-blur-md">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                <span>{profile.location}</span>
+                <span className="text-faint">·</span>
+                <span className="text-accent">@{profile.handle}</span>
               </div>
             </div>
           </div>

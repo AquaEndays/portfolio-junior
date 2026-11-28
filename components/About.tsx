@@ -15,7 +15,7 @@ export function About() {
       <div className="container-wide">
         <SectionHeading index="01 / IDENTITÉ" title="À propos" />
 
-        <div className="grid gap-12 lg:grid-cols-[0.95fr,1.05fr] lg:gap-16">
+        <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
           <div className="space-y-8">
             <h3 className="font-display text-2xl font-semibold leading-[1.25] tracking-tight text-fg sm:text-3xl">
               <MaskedLine delay={40}>{about.lead}</MaskedLine>

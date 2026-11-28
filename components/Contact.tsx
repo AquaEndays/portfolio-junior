@@ -10,7 +10,7 @@ export function Contact() {
   return (
     <section id="contact" className="border-t border-line bg-bg-soft/35 py-24 sm:py-32">
       <div className="container-wide">
-        <div className="grid items-end gap-12 lg:grid-cols-[1.15fr,0.85fr]">
+        <div className="grid items-end gap-12 lg:grid-cols-[1.15fr_0.85fr]">
           <div>
             <p className="mb-3 font-mono text-xs tracking-[0.2em] text-accent">
               06 / CONTACT
